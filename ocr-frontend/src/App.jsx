@@ -9,6 +9,7 @@ function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [extractedText, setExtractedText] = useState('');
   const [progress, setProgress] = useState(0);
+  const [ocrEngine, setOcrEngine] = useState('easyocr'); 
 
   const handleImageUpload = (file) => {
     setUploadedImage(file);
@@ -18,18 +19,40 @@ function App() {
 
   const handleProcessImage = async () => {
     if (!uploadedImage) return;
-    
+
     setIsProcessing(true);
-    
-    // Simulate processing progress
-    for (let i = 0; i <= 100; i += 20) {
-      setProgress(i);
-      await new Promise(resolve => setTimeout(resolve, 300));
+    setExtractedText('');
+    setProgress(0);
+
+    const formData = new FormData();
+    formData.append('image', uploadedImage);
+    formData.append('ocr_engine', ocrEngine);
+
+    try {
+      const response = await fetch('http://localhost:8000/ocr/', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMessage = data.error || `Request failed with status: ${response.status}`;
+        const errorDetails = data.details || data.stderr || 'No further details provided.';
+        console.error('Server Error:', errorMessage, errorDetails);
+        setExtractedText(`Error: ${errorMessage}\n\nDetails:\n${errorDetails}`);
+      } else {
+        setExtractedText(data.predicted_text || 'No text was extracted.');
+        console.log('Confidence:', data.confidence);
+        console.log('CER:', data.cer);
+      }
+    } catch (error) {
+      console.error('API Call Failed:', error);
+      setExtractedText('Network Error: Could not connect to the OCR service. Please ensure the backend server is running and accessible.');
+    } finally {
+      setIsProcessing(false);
+      setProgress(100); 
     }
-    
-    // TODO: Replace with your actual OCR API call
-    setExtractedText('Sample extracted text will appear here after processing your image.');
-    setIsProcessing(false);
   };
 
   const handleReset = () => {
@@ -50,8 +73,8 @@ function App() {
                 <span className="text-white text-xl">📸</span>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-purple-600">ImageText Pro</h1>
-                <p className="text-sm text-gray-600">Extract text from images ✨</p>
+                <h1 className="text-2xl font-bold text-purple-600">Nepalbhasa OCR</h1>
+                <p className="text-sm text-gray-600">Unlock Words from Images ✨</p>
               </div>
             </div>
           </div>
@@ -62,9 +85,28 @@ function App() {
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div className="space-y-6">
+            
+            {/* OCR Engine Selection */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+                <label htmlFor="ocr-engine" className="block text-lg font-semibold text-gray-700 mb-2">
+                    Choose OCR Engine
+                </label>
+                <select 
+                    id="ocr-engine"
+                    value={ocrEngine}
+                    onChange={(e) => setOcrEngine(e.target.value)}
+                    disabled={isProcessing}
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500"
+                >
+                    <option value="easyocr">EasyOCR Model</option>
+                    <option value="paddleocr">PaddleOCR Model</option>
+                </select>
+            </div>
+
             <FileUpload onImageUpload={handleImageUpload} />
+            
             {uploadedImage && (
-              <ImagePreview 
+              <ImagePreview
                 image={uploadedImage}
                 onProcess={handleProcessImage}
                 onReset={handleReset}
