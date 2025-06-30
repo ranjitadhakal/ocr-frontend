@@ -51,14 +51,24 @@ const OcrOutput = ({ text, isProcessing }) => {
             onClick={handleCopy}
             className="flex-1 py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center"
           >
-            {copied ? '✓ Copied!' : '📋 Copy'}
+            {copied ? '✓ Copied!':(
+              <>
+              <div className="flex items-center justify-center gap-2">
+                <img src="/copy_button.jpg" alt="Copy Icon" className="w-5 h-5 object-contain" />
+                <span>Copy</span>
+              </div>
+              </>
+            )}
           </button>
           
           <button
             onClick={handleDownload}
             className="flex-1 py-2 px-4 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center justify-center"
           >
-            💾 Download
+            <div className="flex items-center justify-center gap-2">
+              <img src="/download_button.jpg" alt="Download Icon" className="w-5 h-5 object-contain" />
+              <span>Download</span>
+            </div>
           </button>
         </div>
       </div>

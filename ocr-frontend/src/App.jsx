@@ -70,7 +70,7 @@ function App() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                <span className="text-white text-xl">📸</span>
+                <img src="\project_logo.png" alt="Logo" className="w-full h-full object-cover"/>
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-purple-600">Nepalbhasa OCR</h1>

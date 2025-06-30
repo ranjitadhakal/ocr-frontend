@@ -28,7 +28,7 @@ const FileUpload = ({ onImageUpload }) => {
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
       <h2 className="text-xl font-semibold mb-4 flex items-center">
-        <span className="mr-2">📤</span>
+        <img src="/upload_button.jpg" alt="Upload Icon" className="w-6 h-6 mr-2" />
         Upload Image
       </h2>
       

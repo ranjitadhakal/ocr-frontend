@@ -15,7 +15,7 @@ const ImagePreview = ({ image, onProcess, onReset, isProcessing, progress }) => 
     <div className="bg-white rounded-xl shadow-lg p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-xl font-semibold flex items-center">
-          <span className="mr-2">🖼️</span>
+          <img src="/preview_button.jpg" alt="Preview Icon" className="w-6 h-6 mr-2" />
           Preview
         </h3>
         <button
@@ -68,15 +68,25 @@ const ImagePreview = ({ image, onProcess, onReset, isProcessing, progress }) => 
               : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-lg'
           }`}
         >
-          {isProcessing ? 'Processing...' : '🔍 Extract Text'}
+          {isProcessing ? ( 
+          'Processing...' 
+          ):(
+            <div className="flex items-center justify-center gap-2">
+              <img src="/search_button.jpg" alt="Search Icon" className="w-5 h-5 object-contain" />
+              <span>Extract Text</span>
+            </div>
+            
+          )}
         </button>
         
         <button
           onClick={onReset}
-          className="py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+          className="py-2 px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2"
         >
-          🔄 Reset
+          <img src="/reset_button.jpg" alt="Reset Icon" className="w-5 h-5 object-contain" />
+          <span>Reset</span>
         </button>
+
       </div>
     </div>
   );
