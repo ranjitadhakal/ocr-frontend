@@ -100,6 +100,8 @@ function App() {
                 >
                     <option value="easyocr">EasyOCR Model</option>
                     <option value="paddleocr">PaddleOCR Model</option>
+                    <option value="calamari">Calamari Model</option>
+                    <option value="tesseract">Tesseract</option>                    
                 </select>
             </div>
 
